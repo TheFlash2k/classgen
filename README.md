@@ -18,9 +18,9 @@ def main():
 	}
 ```
 
-fileName -> Change it to the filename you want to store it in
-className -> The Class that you want to generate
-Attributes -> This is a dictionary that will take all the attributes. The key would be the field along with it's cpp data type and the value would be it's visibility mode.
+##### fileName - Change it to the filename you want to store it in
+##### className -> The Class that you want to generate
+##### Attributes -> This is a dictionary that will take all the attributes. The key would be the field along with it's cpp data type and the value would be it's visibility mode.
 
 #### Features to be added:
 > Methods:
