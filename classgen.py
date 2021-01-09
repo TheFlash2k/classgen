@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
 '''
 This will generate a cpp having class of name, whatever you name it.
+AUTHOR: TheFlash2k
+Github Link: https://github.com/TheFlash2k/
+Written in: Python3
 '''
-
 # IMPORTS:
 import sys
 
