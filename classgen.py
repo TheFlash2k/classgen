@@ -5,9 +5,6 @@ AUTHOR: TheFlash2k
 Github Link: https://github.com/TheFlash2k/
 Written in: Python3
 '''
-# IMPORTS:
-import sys
-
 class CPP_GEN:
 	banner = "/* CPP Generator by @TheFlash2k */"
 	output = f"{banner}\n#include <iostream>\n#include <string>\nusing namespace std;\n\n"
