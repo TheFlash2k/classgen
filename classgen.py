@@ -30,8 +30,8 @@ class CPP_GEN:
 		self.fileName = fileName if ".cpp" in fileName else fileName + ".cpp"
 
 	def createClass(self, className):
-		self.output += "class {}".format(className) + "{\n"
 		self.className = className.capitalize()
+		self.output += "class {}".format(self.className) + "{\n"
 		self.hasClass = True
 
 	def addAttrib(self, *attribs):
