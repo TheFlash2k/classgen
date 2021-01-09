@@ -29,3 +29,5 @@ A capability to add custom methods along with their parameters would be added so
 
 ##### Why I made this script:
 During my exams, I really waste my time writing each setter, getter, constructor and stuff. I was free today and wanted more stuff on my github so decided to write this idk. ;-;
+
+[![carbon.png](https://i.postimg.cc/WphxysSH/carbon.png)](https://postimg.cc/RqxP65k7)
