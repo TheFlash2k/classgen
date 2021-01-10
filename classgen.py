@@ -25,7 +25,6 @@ class CPP_GEN:
 			if char in fileName:
 				fileName = fileName.replace(char, '')
 		self.fileName = fileName if ".cpp" in fileName else fileName + ".cpp"
-
 	def createClass(self, className):
 		self.output += "class {}".format(className.capitalize()) + "{\n"
 		self.className = className.capitalize()
@@ -71,42 +70,38 @@ class CPP_GEN:
 		if '{' != data[-2] and '}' != data[-1]:
 			data += '{' + '}' # I have no idea how to add both of them using just a single string
 		self.output += f"{mode}:\n\t{data}\n"
-
+	def validate(self, cons):
+		numbers = ('int', 'float', 'double', 'long', 'short')
+		for number in numbers:
+			if number in cons:
+				cons += " = 0"
+		if "string" in cons:
+			if "*" in cons:
+				cons += " = NULL"
+			else:
+				cons += " = \"\""
+		elif "char" in cons:
+			if "*" in cons:
+				cons += " = \"\""
+			else:
+				cons += " = '_'"
+		elif "*" in cons:
+			cons += " = NULL"
+		elif "[" in cons and "]" in cons:
+			cons += " = { 0 " + "}"
+		return cons
 	def generateConstructor(self):
 		mode = "public:\n\t"
 		tAttribs = len(self.attributes)
-		index = 0
-		cons = f"{self.className}({self.attributes[index]} "
-		index += 1
-		numbers = ('int', 'double', 'float')
-		for number in numbers:
-			if number in cons:
-				cons += "= 0"
-		if index != tAttribs:
-			for i in range(1, tAttribs):
-				data = self.attributes[i]
-				cons += f", {data} "
-				if "string" in data:
-					if "*" in data:
-						cons += "= NULL"
-					else:
-						cons += "= \"\""
-				elif "char" in data:
-					if "*" in data:
-						cons += "= \"\""
-					else:
-						cons += "= '_'"
-				elif "*" in data:
-					cons += "= NULL"
-		cons += "): "
-		variables = self.attributes
-		for variable in variables:
-			variable = variable.split()[1]
-			cons += f"{variable}({variable}), "
-		if cons[-2] == ',':
-			cons = cons[:-2]
-		cons += " {}\n"
-		self.output += f"{mode}{cons}"
+		index  = 0
+		cons = f"{self.className}("
+		attribs = list()
+		for i in range(tAttribs):
+			attribs.append(self.validate(self.attributes[index]))
+			index += 1
+		attribs = ', '.join(attribs)
+		cons += attribs + ") {}\n"
+		self.output += mode + cons
 	# This will create the setters and getter methods
 	def generateSetters(self):
 		variables = self.attributes
