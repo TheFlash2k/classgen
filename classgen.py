@@ -8,12 +8,11 @@ Written in: Python3
 class CPP_GEN:
 	banner = "/* CPP Generator by @TheFlash2k */"
 	output = f"{banner}\n#include <iostream>\n#include <string>\nusing namespace std;\n\n"
-	hasAttribs = False
-	hasClass = False
-	className = ""
-	attributes = list()
+
 	def __init__(self, fileName):
+		self.attributes = list()
 		self.setFileName(fileName)
+		self.prevMode = "" # Will contain the visibility mode of the last attribute
 	'''
 	This method renames the output file to a valid filename.
 	In this file, the output is stored.
@@ -45,11 +44,19 @@ class CPP_GEN:
 				arrayIndex = field[begin:end]
 				field = field[:begin] + field[end:] + arrayIndex
 			mode  = data[1].strip()
-			self.output += f"{mode}:\n\t{field};\n"
+			if self.prevMode == mode:
+				self.output += f"\t{field};\n"
+			else:
+				self.output += f"{mode}:\n\t{field};\n"
+				self.prevMode = mode
+			self.prevMode = mode
 		self.hasAttribs = True
 	def addDirectAttrib(self, data, mode):
-		self.output += f"{mode}:\n\t{data}\n"
-
+		if self.prevMode == mode:
+			self.output += f"\t{data}\n"
+		else:
+			self.output += f"{mode}:\n\t{data}\n"
+		self.prevMode = mode
 	def addMethod(self, methods):
 		index = 0
 		for method in methods.items():
@@ -64,12 +71,20 @@ class CPP_GEN:
 				for arg in method[1]:
 					args += arg + ', '
 				args = args[:-2] + '){' + '}'
-			self.output += f"{mode}:\n\t{rtType} {name} {args}\n"
+			if self.prevMode == mode:
+				self.output += f"\t{rtType} {name} {args}\n"
+			else:
+				self.output += f"{mode}:\n\t{rtType} {name} {args}\n"
+				self.prevMode = mode
 
 	def addDirectMethod(self, data, mode):
 		if '{' != data[-2] and '}' != data[-1]:
 			data += '{' + '}' # I have no idea how to add both of them using just a single string
-		self.output += f"{mode}:\n\t{data}\n"
+		if self.prevMode == mode:
+			self.output += f"\t{data}\n"
+		else:
+			self.output += f"{mode}:\n\t{data}\n"
+		self.prevMode = mode
 	def validate(self, cons):
 		numbers = ('int', 'float', 'double', 'long', 'short')
 		for number in numbers:
@@ -91,7 +106,7 @@ class CPP_GEN:
 			cons += " = { 0 " + "}"
 		return cons
 	def generateConstructor(self):
-		mode = "public:\n\t"
+		mode = "public:\n\t" if self.prevMode != "public" else "\t"
 		tAttribs = len(self.attributes)
 		index  = 0
 		cons = f"{self.className}("
@@ -100,12 +115,18 @@ class CPP_GEN:
 			attribs.append(self.validate(self.attributes[index]))
 			index += 1
 		attribs = ', '.join(attribs)
-		cons += attribs + ") {}\n"
+		cons += attribs + ") : "
+		attributes = ""
+		for data in self.attributes:
+			data = data.split()[1]
+			cons += f"{data}({data}), "
+		cons = cons[:-2] # Removing the extra comma.
+		cons += " {}\n"
 		self.output += mode + cons
+		self.prevMode = "public" # Setting the mode to be public
 	# This will create the setters and getter methods
 	def generateSetters(self):
 		variables = self.attributes
-		self.output += "public:\n"
 		vars = list()
 		setters = list()
 		
@@ -119,7 +140,6 @@ class CPP_GEN:
 			self.output += setters[i] + "\n\t}\n"
 	def generateGetters(self):
 		variables = self.attributes
-		self.output += "public:\n"
 		vars = list()
 		getters = list()
 		datatypes = list()
@@ -166,9 +186,9 @@ def main():
 	# Attributes that must be added.
 	attributes = {
 		"char* address" : "private",
+		"float cgpa" : "private",
 		"int age" : "protected",
-		"string name" : "public",
-		"float cgpa" : "private"
+		"string name" : "public"
 	}
 	# Methods that be added.
 	'''
@@ -178,7 +198,7 @@ def main():
 	just pass an empty list
 	'''
 	methods = {
-		("bool", "hasName", "private") : [],
+		("bool", "hasName", "public") : [],
 		("int", "inputAge", "public") : ['int age', 'string name']
 	}
 
@@ -197,7 +217,7 @@ def main():
 	gen.addAttrib(attributes)
 	gen.addDirectAttrib(attribute, mode) # This method allows direct addition of attributes by passing a string of attribute and a string of visibility mode
 	gen.addDirectMethod(method, mode)
-	gen.addDirectMethod(data=f"int totalAge(int age, {format(className.capitalize())} obj)", mode="protected") # Adding a method, directly. Just for a POC
+	gen.addDirectMethod(data=f"int totalAge(int age, {format(className.capitalize())} obj)", mode="private") # Adding a method, directly. Just for a POC
 	gen.addMethod(methods)
 	gen.createObject() # This will generate all the setters, getters and a constructor
 if __name__ == "__main__":
