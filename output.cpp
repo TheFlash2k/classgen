@@ -18,6 +18,7 @@ private:
 public:
 	bool hasName (){}
 	int inputAge (int age, string name){}
+	friend class Employees;
 	Check(char* address = "", float cgpa = 0, int age = 0, string name = "") : address(address), cgpa(cgpa), age(age), name(name) {}
 	void setAddress(char* address){
 		this->name = name;
