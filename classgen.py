@@ -1,4 +1,4 @@
-	#!/usr/bin/env python3
+#!/usr/bin/env python3
 '''
 This will generate a cpp having class of name, whatever you name it.
 AUTHOR: TheFlash2k
