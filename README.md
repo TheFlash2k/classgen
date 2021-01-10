@@ -1,5 +1,10 @@
 # ClassGen - A Python3 based script to generate CPP files for custom classes.
 
+- What is output.cpp
+```
+Output.cpp is the file that will be generated when you simply clone the git and run the program. It has been added so that you can see how the output will look like once stored
+```
+
 ### Usage:
 Changes within the code is required:
 Check `main()` function
