@@ -28,6 +28,12 @@ class CPP_GEN:
 		self.output += "class {}".format(className.capitalize()) + "{\n"
 		self.className = className.capitalize()
 		self.hasClass = True
+	def addFriend(self, className):
+		mode = "public"
+		if self.prevMode != mode:
+			self.output += f"{mode}:\n"
+			self.prevMode = mode
+		self.output += f"\tfriend class {className};\n"
 	def addAttrib(self, attribs):
 		# Attrib now contains a dictionary of all the items
 		for data in attribs.items():
