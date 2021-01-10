@@ -62,6 +62,17 @@ gen.addDirectAttrib(attribute, mode)
 # Test Call 2
 gen.addDirectAttrib("int numberObjects", "private")
 ```
+- Add other classes to be friend of existing class:<br>
+We can declare other classes to be friend of the existing class. Like, consider a class Stack, if in `Node`, we declare this class as friend, the cpp declartion would look like:
+```cpp
+friend class Stack; // This would be in class Node
+```
+So, in order to make this happen in python, following method was implemented.
+```python
+friendClassName = "Employees" # This will be passed to the addFriends function to make this class a friend of the existing class
+gen.addFriend(friendClassName) # Calling the friend function adder method.
+```
+The `friendClassName` represents the name of the class that is to be added as friend. While the method call is pretty self-explanatory
 
 ### Why I made this script:
 During my exams, I wasted alot of my time writing each setter, getter, constructor and stuff. I was free today and wanted more stuff on my github so decided to write this idk. ;-;
