@@ -23,7 +23,7 @@ private:
 public:
 	int inputAge (int age, string name){}
 public:
-	Check(char* address , int age , string name = "", float cgpa ): address(address), age(age), name(name), cgpa(cgpa) {}
+	Check(char* address = "", int age = 0, string name = "", float cgpa = 0) {}
 public:
 	void setAddress(char* address){
 		this->cgpa = cgpa;
