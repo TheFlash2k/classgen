@@ -1,6 +1,6 @@
 # ClassGen - A Python3 based script to generate CPP files for custom classes.
 
-##### Usage:
+### Usage:
 Changes within the code is required:
 Check `main()` function
 - Change the name of output file
@@ -58,7 +58,7 @@ gen.addDirectAttrib(attribute, mode)
 gen.addDirectAttrib("int numberObjects", "private")
 ```
 
-##### Why I made this script:
+### Why I made this script:
 During my exams, I wasted alot of my time writing each setter, getter, constructor and stuff. I was free today and wanted more stuff on my github so decided to write this idk. ;-;
 
 <!--
