@@ -6,49 +6,42 @@ using namespace std;
 class Check{
 private:
 	char* address;
+	float cgpa;
 protected:
 	int age;
 public:
 	string name;
-private:
-	float cgpa;
-public:
 	string fatherName
-public:
 	string capitalize(string data, int out){}
-protected:
-	int totalAge(int age, Check obj){}
 private:
+	int totalAge(int age, Check obj){}
+public:
 	bool hasName (){}
-public:
 	int inputAge (int age, string name){}
-public:
-	Check(char* address = "", int age = 0, string name = "", float cgpa = 0) {}
-public:
+	Check(char* address = "", float cgpa = 0, int age = 0, string name = "") : address(address), cgpa(cgpa), age(age), name(name) {}
 	void setAddress(char* address){
-		this->cgpa = cgpa;
-	}
-	void setAge(int age){
-		this->cgpa = cgpa;
-	}
-	void setName(string name){
-		this->cgpa = cgpa;
+		this->name = name;
 	}
 	void setCgpa(float cgpa){
-		this->cgpa = cgpa;
+		this->name = name;
 	}
-public:
+	void setAge(int age){
+		this->name = name;
+	}
+	void setName(string name){
+		this->name = name;
+	}
 	char* getAddress() const {
 		return this->address;
+	}
+	float getCgpa() const {
+		return this->cgpa;
 	}
 	int getAge() const {
 		return this->age;
 	}
 	string getName() const {
 		return this->name;
-	}
-	float getCgpa() const {
-		return this->cgpa;
 	}
 };
 
