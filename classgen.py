@@ -218,13 +218,15 @@ def main():
 	method = "string capitalize(string data, int out)" # This is just a random method to give you a POC
 	mode = "public" # Just a testing variable that is used on line 178
 	attribute = "string fatherName" # Testing variable that will be passed to addDirectAttrib method on line 202
-
+	friendClassName = "Employees" # This will be passed to the addFriends function to make this class a friend of the existing class
+	
 	gen.createClass(className)
 	gen.addAttrib(attributes)
 	gen.addDirectAttrib(attribute, mode) # This method allows direct addition of attributes by passing a string of attribute and a string of visibility mode
 	gen.addDirectMethod(method, mode)
 	gen.addDirectMethod(data=f"int totalAge(int age, {format(className.capitalize())} obj)", mode="private") # Adding a method, directly. Just for a POC
 	gen.addMethod(methods)
+	gen.addFriend(friendClassName) # Calling the friend function adder method.
 	gen.createObject() # This will generate all the setters, getters and a constructor
 if __name__ == "__main__":
 	main()
