@@ -21,13 +21,13 @@ public:
 	friend class Employees;
 	Check(char* address = "", float cgpa = 0, int age = 0, string name = "") : address(address), cgpa(cgpa), age(age), name(name) {}
 	void setAddress(char* address){
-		this->name = name;
+		this->address = address;
 	}
 	void setCgpa(float cgpa){
-		this->name = name;
+		this->cgpa = cgpa;
 	}
 	void setAge(int age){
-		this->name = name;
+		this->age = age;
 	}
 	void setName(string name){
 		this->name = name;
