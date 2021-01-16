@@ -138,12 +138,16 @@ class CPP_GEN:
 		
 		for variable in variables:
 			vars.append(variable.split()[1])
+		variables_list = list()
 		for var in vars:
 			setters.append(f"\tvoid set{var.capitalize()}(")
+			variables_list.append(var)
+		it = 0
 		for i in range(len(self.attributes)):
 			setters[i] += self.attributes[i] + "){"
-			setters[i] += f"\n\t\tthis->{var} = {var};"
+			setters[i] += f"\n\t\tthis->{variables_list[it]} = {variables_list[it]};"
 			self.output += setters[i] + "\n\t}\n"
+			it += 1
 	def generateGetters(self):
 		variables = self.attributes
 		vars = list()
