@@ -1,55 +1,45 @@
 /* CPP Generator by @TheFlash2k */
 #include <iostream>
 #include <string>
+#include <vector>
+#include <map>
+
 using namespace std;
 
-class Check{
+class Admin{
 private:
-	char* address;
-	float cgpa;
-protected:
-	int age;
+	std::string userName;
 public:
-	string name;
-	string fatherName
-	string capitalize(string data, int out){}
+	uint_t UID;
 private:
-	int totalAge(int age, Check obj){}
+	std::vector<std::string> posts;
 public:
-	bool hasName (){}
-	int inputAge (int age, string name){}
-	friend class Employees;
-	Check(char* address = "", float cgpa = 0, int age = 0, string name = "") : address(address), cgpa(cgpa), age(age), name(name) {}
-	void setAddress(char* address){
-		this->address = address;
+	std::map<int, std::string> uid (int key, std::string possible_value=""){}
+	Admin(std::string userName = {}, uint_t UID = 0, std::vector<std::string> posts = {}) : userName(userName), UID(UID), posts(posts) {}
+	void setUsername(std::string userName){
+		this->userName = userName;
 	}
-	void setCgpa(float cgpa){
-		this->cgpa = cgpa;
+	void setUid(uint_t UID){
+		this->UID = UID;
 	}
-	void setAge(int age){
-		this->age = age;
+	void setPosts(std::vector<std::string> posts){
+		this->posts = posts;
 	}
-	void setName(string name){
-		this->name = name;
+	std::string getUsername() const {
+		return this->userName;
 	}
-	char* getAddress() const {
-		return this->address;
+	uint_t getUid() const {
+		return this->UID;
 	}
-	float getCgpa() const {
-		return this->cgpa;
-	}
-	int getAge() const {
-		return this->age;
-	}
-	string getName() const {
-		return this->name;
+	std::vector<std::string> getPosts() const {
+		return this->posts;
 	}
 };
 
 int main(){
 
-	Check obj;
-	std::cout << "Succesfully created Check object!\n";
+	Admin obj;
+	std::cout << "Succesfully created Admin object!\n";
 	std::cin.get();
 	return 0;
 }

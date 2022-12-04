@@ -7,9 +7,14 @@ Written in: Python3
 '''
 class CPP_GEN:
 	banner = "/* CPP Generator by @TheFlash2k */"
-	output = f"{banner}\n#include <iostream>\n#include <string>\nusing namespace std;\n\n"
+	output = ""
+	libraries = ["iostream", "string"]
+	namespaces = []
 
 	def __init__(self, fileName):
+
+		''' Setting up the specified libraries '''
+
 		self.attributes = list()
 		self.setFileName(fileName)
 		self.prevMode = "" # Will contain the visibility mode of the last attribute
@@ -24,16 +29,33 @@ class CPP_GEN:
 			if char in fileName:
 				fileName = fileName.replace(char, '')
 		self.fileName = fileName if ".cpp" in fileName else fileName + ".cpp"
+
 	def createClass(self, className):
 		self.output += "class {}".format(className.capitalize()) + "{\n"
 		self.className = className.capitalize()
 		self.hasClass = True
+
 	def addFriend(self, className):
 		mode = "public"
 		if self.prevMode != mode:
 			self.output += f"{mode}:\n"
 			self.prevMode = mode
 		self.output += f"\tfriend class {className};\n"
+
+	def addLibrary(self, library):
+		if type(library) == str:
+			self.libraries.append(library)
+		elif type(library) == list:
+			for lib in library:
+				self.libraries.append(lib)
+
+	def addNamespace(self, namespace):
+		if type(namespace) == str:
+			self.namespaces.append(namespace)
+		elif type(namespace) == list:
+			for ns in namespace:
+				self.namespaces.append(ns)
+
 	def addAttrib(self, attribs):
 		# Attrib now contains a dictionary of all the items
 		for data in attribs.items():
@@ -91,6 +113,7 @@ class CPP_GEN:
 		else:
 			self.output += f"{mode}:\n\t{data}\n"
 		self.prevMode = mode
+
 	def validate(self, cons):
 		numbers = ('int', 'float', 'double', 'long', 'short')
 		for number in numbers:
@@ -100,7 +123,7 @@ class CPP_GEN:
 			if "*" in cons:
 				cons += " = NULL"
 			else:
-				cons += " = \"\""
+				cons += " = {}"
 		elif "char" in cons:
 			if "*" in cons:
 				cons += " = \"\""
@@ -111,6 +134,7 @@ class CPP_GEN:
 		elif "[" in cons and "]" in cons:
 			cons += " = { 0 " + "}"
 		return cons
+
 	def generateConstructor(self):
 		mode = "public:\n\t" if self.prevMode != "public" else "\t"
 		tAttribs = len(self.attributes)
@@ -131,6 +155,7 @@ class CPP_GEN:
 		self.output += mode + cons
 		self.prevMode = "public" # Setting the mode to be public
 	# This will create the setters and getter methods
+
 	def generateSetters(self):
 		variables = self.attributes
 		vars = list()
@@ -178,59 +203,21 @@ class CPP_GEN:
 		self.generateGetters()
 		self.output += "};\n"
 		self.createMain()
+
 	def createMain(self):
 		self.output += "\nint main(){\n\n\t" + f"{self.className} obj;\n\tstd::cout << \"Succesfully created {self.className} object!\\n\";\n\tstd::cin.get();\n\treturn 0;\n" + '}'
+		## Adding the libraries:
+		inc = "#include "
+		_namespace = "using namespace "
+
+		libs = [f"{inc}<{i}>" for i in self.libraries]
+		nss = [f"{_namespace}{i};" for i in self.namespaces]
+
+		self.output = self.banner + "\n" + "\n".join(libs) + "\n\n" + "\n".join(nss) + "\n\n" + self.output
 		self.writeToObject()
+
 	def writeToObject(self):
 		f = open(self.fileName, "w")
 		f.write(self.output)
 		f.close()
 		print(f"Wrote to file {self.fileName} having class name {self.className}")
-
-def main():
-	fileName = "output" # Output file name goes here. -> Optional to add .cpp as this script would append it anyways.
-	className = "check" # Class name goes here
-
-	gen = CPP_GEN(fileName) # Creation of object
-
-	# Attributes that must be added.
-	attributes = {
-		"char* address" : "private",
-		"float cgpa" : "private",
-		"int age" : "protected",
-		"string name" : "public"
-	}
-	# Methods that be added.
-	'''
-	To add methods, you must pass the methods as a dictionary,the key must be a tuple,
-	containing the name, return type and visibility mode, respectively. While, the 
-	value must be a list containing all arguments. If the function has no arguments,
-	just pass an empty list
-	'''
-	methods = {
-		("bool", "hasName", "public") : [],
-		("int", "inputAge", "public") : ['int age', 'string name']
-	}
-
-	'''
-	There's also another way to add methods, you just create a string, add the method
-	in there and pass that string to addDirectMethod method along with the visibility mode:
-	-> method = 'string updateName(string name){}'
-	-> gen.addDirectMethod(method, "public")
-	'''
-
-	method = "string capitalize(string data, int out)" # This is just a random method to give you a POC
-	mode = "public" # Just a testing variable that is used on line 178
-	attribute = "string fatherName" # Testing variable that will be passed to addDirectAttrib method on line 202
-	friendClassName = "Employees" # This will be passed to the addFriends function to make the class a friend of the existing class
-	
-	gen.createClass(className)
-	gen.addAttrib(attributes)
-	gen.addDirectAttrib(attribute, mode) # This method allows direct addition of attributes by passing a string of attribute and a string of visibility mode
-	gen.addDirectMethod(method, mode)
-	gen.addDirectMethod(data=f"int totalAge(int age, {format(className.capitalize())} obj)", mode="private") # Adding a method, directly. Just for a POC
-	gen.addMethod(methods)
-	gen.addFriend(friendClassName) # Calling the friend class adder method.
-	gen.createObject() # This will generate all the setters, getters and a constructor
-if __name__ == "__main__":
-	main()
